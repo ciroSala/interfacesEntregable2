@@ -8,29 +8,45 @@
     <script src="/js/main.js" defer></script>
 </head>
 <body>
-    <section>
-        <h1>PAINT</h1>
-        <main>
-            <aside>
-                <button id="buttonLapiz">
-                    <img src="/img/lapiz.png" alt="lapiz">
+    <h1>PAINT</h1>
+    <main>
+        <aside>
+            <button id="buttonLapiz">
+                <img src="/img/lapiz.png" alt="lapiz">
+            </button>
+            <button id="buttonGoma">
+                <img src="/img/goma.png" alt="goma">
+            </button>
+            <button id="buttonBorrar">
+                Clear
+            </button>
+            <div class="cargar-imagen-container">
+                <button id="buttonCargarImagen">
+                    <img src="/img/carpeta.png" alt="Cargar imagen">
+                    <span>Elegir archivo</span>
                 </button>
-                <button id="buttonGoma">
-                    <img src="/img/goma.png" alt="goma">
-                </button>
-                <button id="buttonBorrar">
-                    Clear
-                </button>
-                <div class="cargar-imagen-container">
-                    <button id="buttonCargarImagen">
-                        <img src="/img/carpeta.png" alt="Cargar imagen">
-                        <span>Elegir archivo</span>
-                    </button>
-                    <input type="file" id="cargarImagen" accept="image/*" style="display: none;">
-                </div>
-            </aside>
-            <canvas id="canvas" width="800" height="900"></canvas>
-        </main>
-    </section>
+                <input type="file" id="cargarImagen" accept="image/*" style="display: none;">
+            </div>
+            <button id="buttonFiltroNegativo">
+                Filtro negativo
+            </button>
+            <button id="buttonFiltroBrillo">
+                Filtro brillo
+            </button>
+            <button id="buttonFiltroBinarizacion">
+                Filtro binarizacion
+            </button>
+            <button id="buttonFiltroSepia">
+                Filtro sepia
+            </button>
+            <section>
+                <div id="paletaRed"></div>
+                <div id="paletaGreen"></div>
+                <div id="paletaBlue"></div>
+                <div id="paletaBlack"></div>
+            </section>
+        </aside>
+        <canvas id="canvas" width="800" height="900"></canvas>
+    </main>
 </body>
 </html>

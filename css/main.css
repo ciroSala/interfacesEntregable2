@@ -1,18 +1,33 @@
-main{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-section{
+
+body{
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #bbb;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+}
+
+main{
+    display: flex;
+}
+
+section{
+    display: flex;
+    align-items: center;
+    margin: 20px;
 }
 
 canvas{
     background-color: white; 
     border: 1px solid black;
+}
+
+main aside{
+    display: flex;
+    flex-direction: column;
+    margin-right: 20px;
 }
 
 button img {
@@ -56,3 +71,41 @@ button img {
     opacity: 0; /* Hacer el input invisible */
     cursor: pointer;
 }
+
+button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 15px;
+    border: 1px solid rgb(216, 216, 216);
+    cursor: pointer;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
+                inset -1px -1px 0px rgba(0, 0, 0, 0);; /* Sombra interna */
+}
+
+.active{
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+    background-color: #ffffff;
+}
+
+#paletaRed{
+    width: 25px;
+    height: 25px;
+    background-color: red;
+}
+#paletaGreen{
+    width: 25px;
+    height: 25px;
+    background-color: green;
+}
+#paletaBlue{
+    width: 25px;
+    height: 25px;
+    background-color: blue;
+}
+#paletaBlack{
+    width: 25px;
+    height: 25px;
+    background-color: black;
+}
+
