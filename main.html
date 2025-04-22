@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paint</title>
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/js/main.js" defer></script>
+</head>
+<body>
+    <section>
+        <h1>PAINT</h1>
+        <main>
+            <aside>
+                <button id="buttonLapiz">
+                    <img src="/img/lapiz.png" alt="lapiz">
+                </button>
+                <button id="buttonGoma">
+                    <img src="/img/goma.png" alt="goma">
+                </button>
+                <button id="buttonBorrar">
+                    Clear
+                </button>
+                <div class="cargar-imagen-container">
+                    <button id="buttonCargarImagen">
+                        <img src="/img/carpeta.png" alt="Cargar imagen">
+                        <span>Elegir archivo</span>
+                    </button>
+                    <input type="file" id="cargarImagen" accept="image/*" style="display: none;">
+                </div>
+            </aside>
+            <canvas id="canvas" width="800" height="900"></canvas>
+        </main>
+    </section>
+</body>
+</html>
