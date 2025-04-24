@@ -23,6 +23,9 @@ canvas{
     background-color: white; 
     border: 1px solid black;
 }
+canvas:hover{
+    cursor: crosshair;
+}
 
 main aside{
     display: flex;

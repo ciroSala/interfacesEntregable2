@@ -1,6 +1,13 @@
+   /**
+    * @type {HTMLCanvasElement}
+   */
+   const canvas = document.getElementById("canvas");
+   
+   /**
+    * @type {CanvasRenderingContext2D}
+   */
+    const ctx = canvas.getContext("2d");
 
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
     const buttonGoma = document.getElementById('buttonGoma');
     const buttonLapiz = document.getElementById('buttonLapiz');
     const buttonBorrar = document.getElementById('buttonBorrar');
@@ -10,10 +17,14 @@
     const buttonFiltroBrillo = document.getElementById('buttonFiltroBrillo');
     const buttonFiltroBinarizacion = document.getElementById('buttonFiltroBinarizacion');
     const buttonFiltroSepia = document.getElementById('buttonFiltroSepia');
+    const buttonFiltroBlur = document.getElementById('buttonFiltroBlur');
     const paletaRed = document.getElementById('paletaRed');
     const paletaGreen = document.getElementById('paletaGreen');
     const paletaBlue = document.getElementById('paletaBlue');
     const paletaBlack = document.getElementById('paletaBlack');
+    let filtroBlur = new FiltroBlur();
+    
+    //Por defecto se pone el lapiz como activo con el color negro
     let color = 'black';
     buttonLapiz.classList.add('active');
 
@@ -21,14 +32,16 @@
 
     //Al boton activo ponerle un borde
     
-    // Estado para saber si se está dibujando o borrando
-    // por defecto el estado está para dibujar
+    //  Estado para saber si se está dibujando o borrando, 
+    // por defecto el estado está para dibujar.
     let dibujar = true;
     let borrar = false;
 
-    // Estado para saber si se esta dibujando 
-    let dibujando = false;
+    // Estado para saber si se esta presionando el mouse
+    let mouseDown = false;
 
+    pen = new Pen(ctx, 'black', 20, 'butt'); // Crea un lapiz
+    eraser = new Eraser(ctx, 20); // Crea una goma
 
     buttonBorrar.addEventListener('click', () => {
         borrarCanvas();
@@ -42,7 +55,7 @@
         buttonGoma.classList.remove('active');
     });
 
-    //si seleccionamos la goma, decimos que estamoso en estado de borrar
+    // Si seleccionamos la goma, decimos que estamoso en estado de borrar
     buttonGoma.addEventListener('click', function() {
         borrar = true;
         dibujar = false;
@@ -50,37 +63,49 @@
         buttonGoma.classList.add('active');
     });
 
-    //Vemos en que estado estamos y acomodamos el contexto segun el estado
+    //  Escuchamos el evento mousedown para realizar la acción correspondiente
+    // segun el modo activo, y decir que estamos presionando el mouse.
     canvas.addEventListener('mousedown', function(e) {
-        //console.log(e.clientX, e.clientY);
-        ctx.beginPath();
         if(borrar) {
-            // Para borrar, usamos el modo de composición 'destination-out'
-            // que elimina el contenido del canvas en la zona dibujada 
-            ctx.globalCompositeOperation = 'destination-out';
-            ctx.lineWidth = 20;
-            ctx.lineCap = 'round';
-            ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+            //  Si estamos en modo borrar, decimos que la goma comience a borrar
+            // y arranca el borrado desde el punto (x, y) donde se presiona el mouse y borra
+            eraser.startErasing(e.offsetX, e.offsetY);
+            eraser.delete(e.offsetX, e.offsetY);
         } else if (dibujar) {
-            ctx.globalCompositeOperation = 'source-over';
-            ctx.strokeStyle = color; // Color del lápiz
-            ctx.lineWidth = 50;
+            //  Si estamos en modo dibujar, decimos que el lapiz comienze a dibujar 
+            // asi arranca la linea desde el punto (x, y) donde se presiona el mouse y dibuja
+            pen.startDrawing(e.offsetX, e.offsetY); 
+            pen.draw(e.offsetX, e.offsetY); 
         }
-        dibujando = true;
-        ctx.moveTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
+        // Decimos que estamos presionando el mouse
+        mouseDown = true;
     });
 
+    //  Mientras movemos el mouse en el canvas, verificar si esta el mouse
+    // presionado y si esta presionado verificar en que modo estamos,
+    // para dibujar con el objeto corrrespondiente .
     canvas.addEventListener('mousemove', function(e) {
-        if (dibujando) {
-            console.log(e.clientX, e.clientY);
-            ctx.lineTo(e.clientX - canvas.offsetLeft, e.clientY - canvas.offsetTop);
-            ctx.stroke();
+        if (mouseDown) {
+            //Verificamos el modo en el que estamos, si es borrar o dibujar
+            if(dibujar) {
+                pen.draw(e.offsetX, e.offsetY); // Dibuja la línea
+            }
+            if(borrar) {
+                eraser.delete(e.offsetX, e.offsetY); // Borra la línea
+            }
         }
     });
 
+    //  Si levantamos el mouse, decimos que no estamos presionando el mouse
+    // y verificamos en que modo estamos, para dejar de dibujar con el objeto correspondiente.
     canvas.addEventListener('mouseup', function() {
-        ctx.closePath();
-        dibujando = false;
+        if(dibujar) {
+            pen.stopDrawing(); // Detiene el dibujo
+        }
+        if(borrar){
+            eraser.stopErasing(); // Detiene el borrado
+        }
+        mouseDown = false;
     });
 
     buttonCargarImagen.addEventListener('click', () => {
@@ -182,22 +207,30 @@
         ctx.putImageData(imageData, 0, 0);
     })
 
+    buttonFiltroBlur.addEventListener('click', () => {
+        console.log(filtroBlur)
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        filtroBlur.aplicarFiltro(data, canvas.width, canvas.height);
+        ctx.putImageData(imageData, 0, 0);
+    });
+
     function borrarCanvas() {
         // Limpiar el canvas 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     paletaRed.addEventListener('click', function() {
-        color = 'red';
+        pen.setColor('red'); // Cambia el color del lápiz a rojo
     });
     paletaGreen.addEventListener('click', function() {
-        color = 'green';
+        pen.setColor('green'); // Cambia el color del lápiz a verde
     });
     paletaBlue.addEventListener('click', function() {
-        color = 'blue';
+        pen.setColor('blue'); // Cambia el color del lápiz a azul
     });
     paletaBlack.addEventListener('click', function() {
-        color = 'black';
+        pen.setColor('black'); // Cambia el color del lápiz
     });
 
     //  Se podria hacer una clase padre filtro, donde cada filtro herede de esta, 
