@@ -1,15 +1,11 @@
-*{
-    font-size: 1rem;
-    font-family: 'Arial Narrow','Arial';
-    font-weight: 800;
-}
 
 body{
+    font-family: "Jost", sans-serif;
+    color: white;
+    letter-spacing: 0.05em; 
     margin: 0;
     padding: 0;
-    font-family: ;
-    background-color: #505050;
-    color: white;
+    background-color: #252525;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -17,18 +13,16 @@ body{
 
 main{
     display: flex;
+    margin-top: 0px;
+    margin: 20px;
 }
 
 h1{
-    font-size: 3rem;
-    margin: 1rem;
-    padding: 0;
-    text-align: center;
+    font-size: 30px;
 }
 
 canvas{
     background-color: white; 
-    border: 1px solid black;
 }
 canvas:hover{
     cursor: crosshair;
@@ -63,7 +57,7 @@ button img { /* Espacio entre la imagen y el texto */
     margin-right: 5px; /* Espacio entre la imagen y el texto */
 }
 
-#botonCargarImagen {
+#botonCargarImage {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -77,7 +71,7 @@ button img { /* Espacio entre la imagen y el texto */
 
 
 button {
-    background-color: #505050;
+    background-color: #252525;
     color: white;
     display: flex;
     align-items: center;
@@ -90,15 +84,15 @@ button {
 
 button:hover{
     cursor: pointer;
-    box-shadow: inset 2px 2px 5px  #ffffff;
-    background-color: #898989;
+    box-shadow: inset 1px 1px 5px  #ffe1e1;
+    background-color: #484848;
     transition: 0.5s;
 }
 
 .active{
     cursor: pointer;
-    box-shadow: inset 2px 2px 5px #ffffff;
-    background-color: #898989;
+    box-shadow: inset 1px 1px 5px #ffe1e1;
+    background-color: #484848;
 }
 
 

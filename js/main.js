@@ -47,7 +47,9 @@
     pen = new Pen(ctx, 'black', 40); // Crea un lapiz
     eraser = new Eraser(ctx, 25); // Crea una goma
 
-    // Si seleccionamos el lapiz, acomodamos el contexto para dibujar
+    //  Si seleccionamos el lapiz, activamos el estado de dibujar
+    // y desactivamos el estado de borrar, ademas agrego una clase active 
+    // para mostrar que el lapiz esta activo y saco la clase active de la goma
     buttonLapiz.addEventListener('click', function() {
         borrar = false;
         dibujar = true;
@@ -55,7 +57,9 @@
         buttonGoma.classList.remove('active');
     });
 
-    // Si seleccionamos la goma, decimos que estamoso en estado de borrar
+    //  Si seleccionamos la goma, decimos que estamoso en estado de borrar
+    // y desactivamos el estado de dibujar, ademas agrego una clase active
+    // para mostrar que la goma esta activa y saco la clase active del lapiz
     buttonGoma.addEventListener('click', function() {
         borrar = true;
         dibujar = false;
@@ -68,6 +72,7 @@
         borrarCanvas();
     });
 
+    // Si seleccionamos el color del input, se cambia el color del lapiz
     inputColorPicker.addEventListener('input', function() {
         // Cambia el color del lápiz al color seleccionado en el input
         pen.setColor(inputColorPicker.value); 
@@ -76,6 +81,8 @@
     //  Escuchamos el evento mousedown para realizar la acción correspondiente
     // segun el modo activo, y decir que estamos presionando el mouse.
     canvas.addEventListener('mousedown', function(e) {
+        //  Aca se podrian crear otros modos y segun el modo activo
+        // hacemos que dibuje el objeto correspondiente.
         if(borrar) {
             //  Si estamos en modo borrar, decimos que la goma comience a borrar
             // y arranca el borrado desde el punto (x, y) donde se presiona el mouse y borra
@@ -123,7 +130,6 @@
     });
     
     cargarImagenInput.addEventListener('change', (event) => {
-        console.log(1);
         // Si estamos en modo borrar, no se puede cargar una imagen hay que cambiar 
         // el modo de composicion a 'source-over' para que la imagen se dibuje
         // y no se borre. Luego si queremos seguir borrando, el estado de borrar se mantiene
@@ -131,6 +137,9 @@
         if(borrar) {
             ctx.globalCompositeOperation = 'source-over';
         }
+        //  Aca se carga la imagen en el canvas, primero se obtiene el archivo del input
+        // y si existe, se crea un FileReader para leer el archivo como una URL de datos
+        // y luego se crea una imagen a partir de la URL de datos leida por el FileReader.
         const file = event.target.files[0];
         if (file) {
             const reader = new FileReader();
@@ -148,8 +157,8 @@
         cargarImagenInput.value = '';
     });
 
+    // Limpiar el canvas 
     function borrarCanvas() {
-        // Limpiar el canvas 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -159,27 +168,31 @@
         filtroNegativo.aplicarFiltro(ctx, canvas);
     });
 
-    //El filtro de brillo suma 50 a cada valor de color (rojo, verde y azul)
-    //por lo que si el valor es mayor a 255, se le asigna 255
+    //  El filtro de brillo suma 50 a cada valor de color (rojo, verde y azul)
+    // por lo que si el valor es mayor a 255, se le asigna 255
     buttonFiltroBrillo.addEventListener('click', () => {
         filtroBrillo.aplicarFiltro();
     });
 
-    //El filtro de binarizacion convierte los valores de color (rojo, verde y azul)
+    // El filtro de binarizacion convierte los valores de color (rojo, verde y azul)
     buttonFiltroBinarizacion.addEventListener('click', () => { 
         filtroBinarizacion.aplicarFiltro();
     });
 
-    //El filtro sepia convierte los valores de color (rojo, verde y azul) 
-    //a un color sepia, por lo que se le suma 50 al rojo y verde 
+    //  El filtro sepia convierte los valores de color (rojo, verde y azul) 
+    // a un color sepia, por lo que se le suma 50 al rojo y verde 
     buttonFiltroSepia.addEventListener('click', () => {
         filtroSepia.aplicarFiltro();
     })
 
+    //  El filtro blur aplica un desenfoque a la imagen, obteniendo un promedio
+    // de los valores de color (rojo, verde y azul) de los pixeles vecinos para cada pixel
     buttonFiltroBlur.addEventListener('click', () => {
         filtroBlur.aplicarFiltro();
     });
 
+    //  El filtro de saturacion aumenta o disminuye la saturacion de la imagen
+    // multiplicando el valor de saturacion por un factor, si el factor es mayor a 1
     buttonFiltroAumentarSaturacion.addEventListener('click', () => {
         filtroSaturacion.aplicarFiltro(2); // Aumentar saturación
     });
