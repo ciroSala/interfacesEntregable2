@@ -1,11 +1,11 @@
 class Pen{
     //  Constructor para crear un objeto de tipo Pen, segun las propiedas
     // que se le pasen como argumento. 
-    constructor(context, color, lineWidth, lineCap){
+    constructor(context, color, lineWidth){
         this.ctx = context;
         this.color = color;
         this.lineWidth = lineWidth;
-        this.lineCap = lineCap;
+        this.lineCap = 'butt';
     }
 
     //  Modifica el contexto para que la línea comience a dibujarse

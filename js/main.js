@@ -8,29 +8,33 @@
    */
     const ctx = canvas.getContext("2d");
 
+    // Agarramos todos los elementos del DOM que se van a usar
     const buttonGoma = document.getElementById('buttonGoma');
     const buttonLapiz = document.getElementById('buttonLapiz');
     const buttonBorrar = document.getElementById('buttonBorrar');
+    const inputColorPicker = document.getElementById('inputColorPicker');
     const buttonCargarImagen = document.getElementById('buttonCargarImagen');
+    const buttonDescargarImagen = document.getElementById('buttonDescargarImagen');
     const cargarImagenInput = document.getElementById('cargarImagen');
     const buttonFiltroNegativo = document.getElementById('buttonFiltroNegativo');
     const buttonFiltroBrillo = document.getElementById('buttonFiltroBrillo');
     const buttonFiltroBinarizacion = document.getElementById('buttonFiltroBinarizacion');
     const buttonFiltroSepia = document.getElementById('buttonFiltroSepia');
     const buttonFiltroBlur = document.getElementById('buttonFiltroBlur');
-    const paletaRed = document.getElementById('paletaRed');
-    const paletaGreen = document.getElementById('paletaGreen');
-    const paletaBlue = document.getElementById('paletaBlue');
-    const paletaBlack = document.getElementById('paletaBlack');
-    let filtroBlur = new FiltroBlur();
+    const buttonFiltroAumentarSaturacion = document.getElementById('buttonAumentarSaturacion');
+    const buttonFiltroDisminuirSaturacion = document.getElementById('buttonDisminuirSaturacion');
+
+    // Creamos los objetos de los filtros
+    let filtroNegativo = new FiltroNegativo(ctx, canvas);
+    let filtroBrillo = new FiltroBrillo(ctx, canvas);
+    let filtroBinarizacion = new FiltroBinarizacion(ctx, canvas);
+    let filtroSepia = new FiltroSepia(ctx, canvas);
+    let filtroBlur = new FiltroBlur(ctx, canvas);
+    let filtroSaturacion = new FiltroSaturacion(ctx, canvas);
     
     //Por defecto se pone el lapiz como activo con el color negro
     let color = 'black';
     buttonLapiz.classList.add('active');
-
-    //Al color activo ponerle un borde 
-
-    //Al boton activo ponerle un borde
     
     //  Estado para saber si se está dibujando o borrando, 
     // por defecto el estado está para dibujar.
@@ -40,12 +44,8 @@
     // Estado para saber si se esta presionando el mouse
     let mouseDown = false;
 
-    pen = new Pen(ctx, 'black', 20, 'butt'); // Crea un lapiz
-    eraser = new Eraser(ctx, 20); // Crea una goma
-
-    buttonBorrar.addEventListener('click', () => {
-        borrarCanvas();
-    });
+    pen = new Pen(ctx, 'black', 40); // Crea un lapiz
+    eraser = new Eraser(ctx, 25); // Crea una goma
 
     // Si seleccionamos el lapiz, acomodamos el contexto para dibujar
     buttonLapiz.addEventListener('click', function() {
@@ -62,6 +62,16 @@
         buttonLapiz.classList.remove('active');
         buttonGoma.classList.add('active');
     });
+
+    // Si presionamos el boton de borrar, se limpia el canvas
+    buttonBorrar.addEventListener('click', () => {
+        borrarCanvas();
+    });
+
+    inputColorPicker.addEventListener('input', function() {
+        // Cambia el color del lápiz al color seleccionado en el input
+        pen.setColor(inputColorPicker.value); 
+    })
 
     //  Escuchamos el evento mousedown para realizar la acción correspondiente
     // segun el modo activo, y decir que estamos presionando el mouse.
@@ -138,113 +148,52 @@
         cargarImagenInput.value = '';
     });
 
-    //El filtro negativo pone los valores opuestos a los que ya tiene la imagen
-    //por lo que se le resta 255 a cada valor de color (rojo, verde y azul)
-    buttonFiltroNegativo.addEventListener('click', () => {
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for (let x = 0; x < canvas.width; x++) {
-            for(let y = 0; y < canvas.height; y++) {
-                const index = (x + y * canvas.width) * 4;
-                data[index] = 255 - data[index]; // Red
-                data[index + 1] = 255 - data[index + 1]; // Green
-                data[index + 2] = 255 - data[index + 2]; // Blue
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-    });
-
-    //El filtro de brillo suma 50 a cada valor de color (rojo, verde y azul)
-    //por lo que si el valor es mayor a 255, se le asigna 255
-    buttonFiltroBrillo.addEventListener('click', () => {
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for (let x = 0; x < canvas.width; x++) {
-            for(let y = 0; y < canvas.height; y++) {
-                const index = (x + y * canvas.width) * 4;
-                data[index] = data[index] + 50; // Red
-                data[index + 1] = data[index + 1] + 50; // Green
-                data[index + 2] = data[index + 2] + 50; // Blue
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-    });
-
-    //El filtro de binarizacion convierte los valores de color (rojo, verde y azul)
-    buttonFiltroBinarizacion.addEventListener('click', () => { 
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for(let x = 0; x < canvas.width; x++) {
-            for(let y = 0; y < canvas.height; y++) {
-                const index = (x + y * canvas.width) * 4;
-                const avg = (data[index] + data[index + 1] + data[index + 2]) / 3; // Promedio de los colores
-                const threshold = 128; // Umbral para binarización
-                // Si el promedio es menor al umbral, se asigna 0
-                // Si el promedio es mayor al umbral, se asigna 255
-                const color = avg < threshold ? 0 : 255; 
-                data[index] = color; // Red
-                data[index + 1] = color; // Green
-                data[index + 2] = color; // Blue
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-    });
-
-    //El filtro sepia convierte los valores de color (rojo, verde y azul) 
-    //a un color sepia, por lo que se le suma 50 al rojo y verde 
-    buttonFiltroSepia.addEventListener('click', () => {
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        for(let x = 0; x < canvas.width; x++) {
-            for(let y = 0; y < canvas.height; y++) {
-                const index = (x + y * canvas.width) * 4;
-                const avg = (data[index] + data[index + 1] + data[index + 2]) / 3; // Promedio de los colores
-                data[index] = avg + 50; // Red
-                data[index + 1] = avg + 50; // Green
-                data[index + 2] = avg; // Blue
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-    })
-
-    buttonFiltroBlur.addEventListener('click', () => {
-        console.log(filtroBlur)
-        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        const data = imageData.data;
-        filtroBlur.aplicarFiltro(data, canvas.width, canvas.height);
-        ctx.putImageData(imageData, 0, 0);
-    });
-
     function borrarCanvas() {
         // Limpiar el canvas 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
-    paletaRed.addEventListener('click', function() {
-        pen.setColor('red'); // Cambia el color del lápiz a rojo
-    });
-    paletaGreen.addEventListener('click', function() {
-        pen.setColor('green'); // Cambia el color del lápiz a verde
-    });
-    paletaBlue.addEventListener('click', function() {
-        pen.setColor('blue'); // Cambia el color del lápiz a azul
-    });
-    paletaBlack.addEventListener('click', function() {
-        pen.setColor('black'); // Cambia el color del lápiz
+    //El filtro negativo pone los valores opuestos a los que ya tiene la imagen
+    //por lo que se le resta 255 a cada valor de color (rojo, verde y azul)
+    buttonFiltroNegativo.addEventListener('click', () => {
+        filtroNegativo.aplicarFiltro(ctx, canvas);
     });
 
-    //  Se podria hacer una clase padre filtro, donde cada filtro herede de esta, 
-    // para instanciar cada filtro se le pasa el contexto y la imagen, y  
-    // cada filtro tiene su metodo aplicarFiltro, que recibe la imagen y el contexto
-    // y lo aplica al contexto
+    //El filtro de brillo suma 50 a cada valor de color (rojo, verde y azul)
+    //por lo que si el valor es mayor a 255, se le asigna 255
+    buttonFiltroBrillo.addEventListener('click', () => {
+        filtroBrillo.aplicarFiltro();
+    });
 
-    //para guardar la imagen en el canvas como un archivo .png
-    //podemos agarrar el contenido del canvas y convertirlo a un archivo .png
-    //y luego descargarlo
-    // const buttonDescargar = document.getElementById('buttonDescargar');
-    // buttonDescargar.addEventListener('click', () => {
-    //     const link = document.createElement('a');
-    //     link.download = 'mi_dibujo.png';
-    //     link.href = canvas.toDataURL('image/png');
-    //     link.click();
-    // });
+    //El filtro de binarizacion convierte los valores de color (rojo, verde y azul)
+    buttonFiltroBinarizacion.addEventListener('click', () => { 
+        filtroBinarizacion.aplicarFiltro();
+    });
+
+    //El filtro sepia convierte los valores de color (rojo, verde y azul) 
+    //a un color sepia, por lo que se le suma 50 al rojo y verde 
+    buttonFiltroSepia.addEventListener('click', () => {
+        filtroSepia.aplicarFiltro();
+    })
+
+    buttonFiltroBlur.addEventListener('click', () => {
+        filtroBlur.aplicarFiltro();
+    });
+
+    buttonFiltroAumentarSaturacion.addEventListener('click', () => {
+        filtroSaturacion.aplicarFiltro(2); // Aumentar saturación
+    });
+
+    buttonFiltroDisminuirSaturacion.addEventListener('click', () => {
+        filtroSaturacion.aplicarFiltro(0.5); // Disminuir saturación
+    });
+
+    //  Para guardar la imagen del canvas como un archivo .png
+    // podemos agarrar el contenido del canvas y convertirlo a un archivo .png
+    // y luego descargarlo
+    buttonDescargarImagen.addEventListener('click', () => {
+        const link = document.createElement('a');
+        link.download = 'mi_dibujo.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    });

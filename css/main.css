@@ -1,9 +1,15 @@
+*{
+    font-size: 1rem;
+    font-family: 'Arial Narrow','Arial';
+    font-weight: 800;
+}
 
 body{
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #bbb;
+    font-family: ;
+    background-color: #505050;
+    color: white;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -13,10 +19,11 @@ main{
     display: flex;
 }
 
-section{
-    display: flex;
-    align-items: center;
-    margin: 20px;
+h1{
+    font-size: 3rem;
+    margin: 1rem;
+    padding: 0;
+    text-align: center;
 }
 
 canvas{
@@ -30,18 +37,30 @@ canvas:hover{
 main aside{
     display: flex;
     flex-direction: column;
-    margin-right: 20px;
+    margin-right: 0px;
 }
 
-button img {
-    margin-right: 5px; /* Espacio entre la imagen y el texto */
+#lapizContainer{
+    display: flex;
+}
+#gomaContainer{
+    display: flex;
+}
+#buttonsImagesContainer{
+   display: flex;
+}
+
+input[type="color"]{
+    height: auto;
+    border: none;
+    cursor: pointer;
+}
+
+button img { /* Espacio entre la imagen y el texto */
+    background-color: ;
     max-width: 24px; /* Ajusta el tamaño máximo de la imagen */
     height: auto;
-}
-
-.cargar-imagen-container {
-    position: relative; /* Para poder posicionar elementos dentro si es necesario */
-    display: inline-block; /* Para que el contenedor no ocupe todo el ancho */
+    margin-right: 5px; /* Espacio entre la imagen y el texto */
 }
 
 #botonCargarImagen {
@@ -51,64 +70,35 @@ button img {
     padding: 10px 15px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9;
     cursor: pointer;
+    margin: 5px;
 }
 
-#botonCargarImagen img {
-    width: 24px; /* Ajusta el tamaño del logo */
-    height: 24px;
-    margin-right: 5px;
-}
 
-#botonCargarImagen span {
-    /* Estilos para el texto "Elegir archivo" */
-}
-
-#cargarImagen {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* Hacer el input invisible */
-    cursor: pointer;
-}
 
 button {
+    background-color: #505050;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 10px 15px;
-    border: 1px solid rgb(216, 216, 216);
+    border: none;
+    box-shadow: inset -1px -1px 5px rgb(255, 255, 255);
+    width: 100%;
+}
+
+button:hover{
     cursor: pointer;
-    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.2),
-                inset -1px -1px 0px rgba(0, 0, 0, 0);; /* Sombra interna */
+    box-shadow: inset 2px 2px 5px  #ffffff;
+    background-color: #898989;
+    transition: 0.5s;
 }
 
 .active{
-    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-    background-color: #ffffff;
+    cursor: pointer;
+    box-shadow: inset 2px 2px 5px #ffffff;
+    background-color: #898989;
 }
 
-#paletaRed{
-    width: 25px;
-    height: 25px;
-    background-color: red;
-}
-#paletaGreen{
-    width: 25px;
-    height: 25px;
-    background-color: green;
-}
-#paletaBlue{
-    width: 25px;
-    height: 25px;
-    background-color: blue;
-}
-#paletaBlack{
-    width: 25px;
-    height: 25px;
-    background-color: black;
-}
 

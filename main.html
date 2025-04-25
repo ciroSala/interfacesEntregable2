@@ -5,51 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paint</title>
     <link rel="stylesheet" href="/css/main.css">
-    <script src="/js/FiltroBlur.js" defer></script>
-    <script src="/js/Eraser.js" defer></script>
     <script src="/js/Pen.js" defer></script>
+    <script src="/js/Eraser.js" defer></script>
+    <script src="/js/FiltroBase.js" defer></script>
+    <script src="/js/FiltroNegativo.js" defer></script>
+    <script src="/js/FiltroBrillo.js" defer></script>
+    <script src="/js/FiltroBinarizacion.js" defer></script>
+    <script src="/js/FiltroSepia.js" defer></script>
+    <script src="/js/FiltroBlur.js" defer></script>
+    <script src="/js/FiltroSaturacion.js" defer></script>
     <script src="/js/main.js" defer></script>
 </head>
 <body>
     <h1>PAINT</h1>
     <main>
         <aside>
-            <button id="buttonLapiz">
-                <img src="/img/lapiz.png" alt="lapiz">
-            </button>
-            <button id="buttonGoma">
-                <img src="/img/goma.png" alt="goma">
-            </button>
-            <button id="buttonBorrar">
-                Clear
-            </button>
-            <div class="cargar-imagen-container">
-                <button id="buttonCargarImagen">
-                    <img src="/img/carpeta.png" alt="Cargar imagen">
-                    <span>Elegir archivo</span>
+            <section id="lapizContainer">
+                <input type="color" id="inputColorPicker" value="#000000">
+                <button id="buttonLapiz">
+                    <img src="/img/lapiz.png" alt="lapiz">
                 </button>
-                <input type="file" id="cargarImagen" accept="image/*" style="display: none;">
-            </div>
-            <button id="buttonFiltroNegativo">
-                Filtro negativo
-            </button>
-            <button id="buttonFiltroBrillo">
-                Filtro brillo
-            </button>
-            <button id="buttonFiltroBinarizacion">
-                Filtro binarizacion
-            </button>
-            <button id="buttonFiltroSepia">
-                Filtro sepia
-            </button>
-            <button id="buttonFiltroBlur">
-                Filtro blur
-            </button>
-            <section>
-                <div id="paletaRed"></div>
-                <div id="paletaGreen"></div>
-                <div id="paletaBlue"></div>
-                <div id="paletaBlack"></div>
+            </section>
+            <section id="gomaContainer">
+                <button id="buttonBorrar">
+                    <img src="/img/basura.png" alt="basura">
+                </button>
+                <button id="buttonGoma">
+                    <img src="/img/goma.png" alt="goma">
+                </button>
+            </section>
+            <section id="buttonsImagesContainer">
+                <div class="cargarImagenContainer">
+                    <button id="buttonCargarImagen">
+                        <img src="/img/carpeta.png" alt="Cargar imagen">
+                        <span> Cargar imagen</span>
+                    </button>
+                    <input type="file" id="cargarImagen" accept="image/*" style="display: none;">
+                </div>
+                <button id="buttonDescargarImagen">
+                    <img src="/img/download.png" alt="Descargar imagen">
+                </button>
+            </section>
+            <section id="filtrosContainer">
+                <button id="buttonFiltroNegativo">
+                    Filtro negativo
+                </button>
+                <button id="buttonFiltroBrillo">
+                    Filtro brillo
+                </button>
+                <button id="buttonFiltroBinarizacion">
+                    Filtro binarizacion
+                </button>
+                <button id="buttonFiltroSepia">
+                    Filtro sepia
+                </button>
+                <button id="buttonFiltroBlur">
+                    Filtro blur
+                </button>
+                <button id="buttonAumentarSaturacion">
+                    Aumentar saturacion
+                </button>
+                <button id="buttonDisminuirSaturacion">
+                    Disminuir saturacion
+                </button>
             </section>
         </aside>
         <canvas id="canvas" width="800" height="900"></canvas>
